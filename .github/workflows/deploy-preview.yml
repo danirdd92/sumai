@@ -5,6 +5,7 @@ on:
     types: [closed]
     branches:
       - preview
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -17,7 +18,7 @@ concurrency:
 
 jobs:
   build:
-    if: github.event.pull_request.merged == true && github.event.pull_request.head.ref == 'main'
+    if: github.event_name == 'workflow_dispatch' || (github.event.pull_request.merged == true && github.event.pull_request.head.ref == 'main')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout preview branch
