@@ -1,0 +1,101 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+
+export async function getStaticPaths() {
+    const posts = await getCollection("posts");
+    const sources = [...new Set(posts.map((post) => post.data.source))];
+
+    return sources.map((source) => {
+        const filteredPosts = posts.filter(
+            (post) => post.data.source === source,
+        );
+        return {
+            params: { source },
+            props: { posts: filteredPosts },
+        };
+    });
+}
+
+const { source } = Astro.params;
+const { posts } = Astro.props;
+
+posts.sort(
+    (a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf(),
+);
+---
+
+<Layout title={`Source: ${source} - SumAI`}>
+    <div class="mb-12 flex items-center gap-4">
+        <h1
+            class="text-4xl font-extrabold text-ct-text tracking-tight flex items-center gap-3"
+        >
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="32"
+                height="32"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="text-sapphire"
+                ><circle cx="12" cy="12" r="10"></circle><path
+                    d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"
+                ></path><path d="M2 12h20"></path></svg
+            >
+            {source}
+        </h1>
+        <span
+            class="text-subtext0 bg-surface0 px-3 py-1 rounded-full text-sm font-medium"
+            >{posts.length} articles</span
+        >
+    </div>
+
+    <ul class="flex flex-col gap-6">
+        {
+            posts.map((post) => (
+                <li>
+                    <a
+                        href={`/posts/${post.id}`}
+                        class="block group p-6 rounded-2xl bg-surface0/30 hover:bg-surface0 border border-transparent hover:border-surface1 transition-all duration-300 flex flex-col h-full"
+                    >
+                        <div class="flex items-center gap-3 mb-3 text-sm text-subtext1">
+                            <time
+                                datetime={post.data.publishDate.toISOString()}
+                                class="text-overlay1"
+                            >
+                                {post.data.publishDate.toLocaleDateString(
+                                    undefined,
+                                    {
+                                        year: "numeric",
+                                        month: "long",
+                                        day: "numeric",
+                                    },
+                                )}
+                            </time>
+                        </div>
+
+                        <h2 class="text-2xl font-bold text-ct-text group-hover:text-blue transition-colors mb-4 line-clamp-2">
+                            {post.data.title}
+                        </h2>
+
+                        <div class="flex flex-wrap gap-2 mt-auto">
+                            {post.data.tags.map((tag) => (
+                                <object>
+                                    <a
+                                        href={`/tags/${tag}`}
+                                        class="inline-flex items-center px-2.5 py-1 rounded-full bg-surface1/50 text-subtext1 text-xs font-medium hover:bg-surface2 hover:text-ct-text transition-colors border border-surface1"
+                                    >
+                                        {tag}
+                                    </a>
+                                </object>
+                            ))}
+                        </div>
+                    </a>
+                </li>
+            ))
+        }
+    </ul>
+</Layout>

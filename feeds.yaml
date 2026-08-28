@@ -1,0 +1,5 @@
+feeds:
+  - url: https://kubernetes.io/feed.xml
+    source: kubernetes
+  - url: https://cilium.io/blog/rss.xml
+    source: cilium

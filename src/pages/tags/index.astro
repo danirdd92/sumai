@@ -1,0 +1,22 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = await getCollection('posts');
+const tags = [...new Set(posts.flatMap(post => post.data.tags))].sort();
+---
+
+<Layout title="All Tags - SumAI">
+    <div class="mb-12">
+        <h1 class="text-4xl font-extrabold text-ct-text tracking-tight mb-2">All Topics</h1>
+        <p class="text-subtext0">Explore articles by tag.</p>
+    </div>
+    
+    <div class="flex flex-wrap gap-4 mt-8">
+        {tags.map(tag => (
+            <a href={`/tags/${tag}`} class="inline-flex items-center px-4 py-2.5 rounded-xl bg-surface0/50 text-subtext1 text-base font-medium hover:bg-surface1 hover:text-ct-text transition-all duration-200 border border-surface0 hover:border-surface1 hover:-translate-y-0.5 hover:shadow-lg shadow-surface0/20">
+                <span class="text-mauve mr-1.5 font-bold">#</span>{tag}
+            </a>
+        ))}
+    </div>
+</Layout>
