@@ -20,8 +20,7 @@ const sources = [...new Set(posts.map((post) => post.data.source))].sort();
         <link
             rel="icon"
             type="image/svg+xml"
-            href={`${import.meta.env.BASE_URL}favicon.svg`}
-        />
+            href={`${import.meta.env.BASE_URL}/favicon.svg`}
         <meta name="generator" content={Astro.generator} />
         <title>{title}</title>
     </head>
@@ -62,9 +61,8 @@ const sources = [...new Set(posts.map((post) => post.data.source))].sort();
                         </li>
                         <li>
                             <a
-                                href={`${import.meta.env.BASE_URL}tags`}
+                                href={`${import.meta.env.BASE_URL}/tags`}
                                 class="block px-3 py-2 rounded-md text-subtext1 hover:text-ct-text hover:bg-surface0 transition-colors whitespace-nowrap"
-                            >
                                 All Tags
                             </a>
                         </li>
@@ -82,10 +80,9 @@ const sources = [...new Set(posts.map((post) => post.data.source))].sort();
                             sources.map((source) => (
                                 <li>
                                     <a
-                                        href={`${import.meta.env.BASE_URL}sources/${source}`}
+                                        href={`${import.meta.env.BASE_URL}/sources/${source}`}
                                         class="block px-3 py-2 rounded-md text-subtext1 hover:text-ct-text hover:bg-surface0 transition-colors whitespace-nowrap"
                                     >
-                                        {source.charAt(0).toUpperCase() +
                                             source.slice(1)}
                                     </a>
                                 </li>

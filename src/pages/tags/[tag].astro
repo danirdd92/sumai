@@ -40,10 +40,7 @@ posts.sort(
         {
             posts.map((post) => (
                 <li>
-                    <a
-                        href={`${import.meta.env.BASE_URL}posts/${post.id}`}
-                        class="block group p-6 rounded-2xl bg-surface0/30 hover:bg-surface0 border border-transparent hover:border-surface1 transition-all duration-300"
-                    >
+                    <a href={`${import.meta.env.BASE_URL}/posts/${post.id}`}>
                         <div class="flex items-center gap-3 mb-3 text-sm text-subtext1">
                             <span class="flex items-center gap-1.5 text-sapphire font-medium">
                                 <svg
