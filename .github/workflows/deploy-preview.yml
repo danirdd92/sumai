@@ -1,0 +1,66 @@
+name: Deploy to GitHub Pages
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - preview
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: 'pages'
+  cancel-in-progress: false
+
+jobs:
+  build:
+    if: github.event.pull_request.merged == true && github.event.pull_request.head.ref == 'main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout preview branch
+        uses: actions/checkout@v4
+        with:
+          ref: preview
+
+      - name: Remove python files, scripts, uv files and agents
+        run: |
+          find . -name "*.py" -type f -delete
+          rm -rf scripts/
+          rm -rf .venv/
+          rm -f uv.lock pyproject.toml .python-version
+          rm -rf agents/
+          rm -f CLAUDE.md AGENTS.md
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@v5
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Build with Astro
+        run: bun run build
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
