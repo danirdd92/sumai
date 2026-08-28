@@ -1,3 +1,4 @@
+# add rss feeds for scraping
 feeds:
   - url: https://kubernetes.io/feed.xml
     source: kubernetes
