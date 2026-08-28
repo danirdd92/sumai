@@ -1,51 +1,97 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import { getCollection } from 'astro:content';
+import Layout from "../layouts/Layout.astro";
+import { getCollection } from "astro:content";
 
-const posts = await getCollection('posts');
-posts.sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf());
+const posts = await getCollection("posts");
+posts.sort(
+    (a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf(),
+);
 ---
 
 <Layout title="SumAI - High Signal Tech Aggregator">
     <div class="mb-12">
-	    <h1 class="text-4xl font-extrabold text-ct-text tracking-tight mb-2">Latest Articles</h1>
-        <p class="text-subtext0">Discover the latest unslopified tech content.</p>
+        <h1 class="text-4xl font-extrabold text-ct-text tracking-tight mb-2">
+            Latest Articles
+        </h1>
+        <p class="text-subtext0">
+            Discover the latest unslopified tech content.
+        </p>
     </div>
-	
-    {posts.length === 0 ? (
-        <div class="bg-surface0/50 rounded-2xl p-8 text-center border border-surface0">
-            <p class="text-subtext0">No articles found. Run the <code class="bg-surface1 px-1.5 py-0.5 rounded text-sm text-peach">fetch_rss.py</code> script to ingest some!</p>
-        </div>
-    ) : (
-        <ul class="flex flex-col gap-6">
-            {posts.map((post) => (
-                <li>
-                    <a href={`/posts/${post.id}`} class="block group p-6 rounded-2xl bg-surface0/30 hover:bg-surface0 border border-transparent hover:border-surface1 transition-all duration-300">
-                        <div class="flex items-center gap-3 mb-3 text-sm text-subtext1">
-                            <span class="flex items-center gap-1.5 text-sapphire font-medium">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
-                                {post.data.source}
-                            </span>
-                            <span class="text-surface2">&bull;</span>
-                            <time datetime={post.data.publishDate.toISOString()} class="text-overlay1">
-                                {post.data.publishDate.toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}
-                            </time>
-                        </div>
-                        
-                        <h2 class="text-2xl font-bold text-ct-text group-hover:text-blue transition-colors mb-4 line-clamp-2">
-                            {post.data.title}
-                        </h2>
-                        
-                        <div class="flex flex-wrap gap-2 mt-auto">
-                            {post.data.tags.map(tag => (
-                                <object><a href={`/tags/${tag}`} class="inline-flex items-center px-2.5 py-1 rounded-full bg-surface1/50 text-subtext1 text-xs font-medium hover:bg-surface2 hover:text-ct-text transition-colors border border-surface1">
-                                    {tag}
-                                </a></object>
-                            ))}
-                        </div>
-                    </a>
-                </li>
-            ))}
-        </ul>
-    )}
+
+    {
+        posts.length === 0 ? (
+            <div class="bg-surface0/50 rounded-2xl p-8 text-center border border-surface0">
+                <p class="text-subtext0">
+                    No articles found. Run the{" "}
+                    <code class="bg-surface1 px-1.5 py-0.5 rounded text-sm text-peach">
+                        fetch_rss.py
+                    </code>{" "}
+                    script to ingest some!
+                </p>
+            </div>
+        ) : (
+            <ul class="flex flex-col gap-6">
+                {posts.map((post) => (
+                    <li>
+                        <a
+                            href={`${import.meta.env.BASE_URL}posts/${post.id}`}
+                            class="block group p-6 rounded-2xl bg-surface0/30 hover:bg-surface0 border border-transparent hover:border-surface1 transition-all duration-300"
+                        >
+                            <div class="flex items-center gap-3 mb-3 text-sm text-subtext1">
+                                <span class="flex items-center gap-1.5 text-sapphire font-medium">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    >
+                                        <circle cx="12" cy="12" r="10" />
+                                        <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+                                        <path d="M2 12h20" />
+                                    </svg>
+                                    {post.data.source}
+                                </span>
+                                <span class="text-surface2">&bull;</span>
+                                <time
+                                    datetime={post.data.publishDate.toISOString()}
+                                    class="text-overlay1"
+                                >
+                                    {post.data.publishDate.toLocaleDateString(
+                                        undefined,
+                                        {
+                                            year: "numeric",
+                                            month: "long",
+                                            day: "numeric",
+                                        },
+                                    )}
+                                </time>
+                            </div>
+
+                            <h2 class="text-2xl font-bold text-ct-text group-hover:text-blue transition-colors mb-4 line-clamp-2">
+                                {post.data.title}
+                            </h2>
+
+                            <div class="flex flex-wrap gap-2 mt-auto">
+                                {post.data.tags.map((tag) => (
+                                    <object>
+                                        <a
+                                            href={`${import.meta.env.BASE_URL}tags/${tag}`}
+                                            class="inline-flex items-center px-2.5 py-1 rounded-full bg-surface1/50 text-subtext1 text-xs font-medium hover:bg-surface2 hover:text-ct-text transition-colors border border-surface1"
+                                        >
+                                            {tag}
+                                        </a>
+                                    </object>
+                                ))}
+                            </div>
+                        </a>
+                    </li>
+                ))}
+            </ul>
+        )
+    }
 </Layout>
